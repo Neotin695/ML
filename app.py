@@ -2,8 +2,9 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
 import json
+import pandas as pd
 
-from model import encoder
+from sklearn.preprocessing import LabelEncoder
 
 flask_app = Flask(__name__)
 model = pickle.load(open("model.pkl", "rb"))
@@ -23,9 +24,25 @@ def process_array():
     features = np.array([array_data])
     predicted_labels = model.predict(features)
 
+    data = pd.read_csv("medical_data.csv").iloc[:, :-2]
+    features_name = list(data['spicitalist'])
+    features_name.append('spicitalist')
+    class_names = data.columns[1:]
+    data_reshaped = data.drop(['spicitalist'], axis=1)
+    data_reshaped.loc[len(data_reshaped.index)] = class_names
+
+    data_reshaped = pd.DataFrame(data_reshaped.values.T, columns=features_name)
+    # تحديد المتغيرات المستقلة (الأعراض) والمستهدفة (التخصص الطبي)
+    X = data_reshaped.drop(['spicitalist'], axis=1)
+    encoder = LabelEncoder()
+    y = encoder.fit_transform(data_reshaped['spicitalist'])
     # يمكنك طباعة التصنيفات المتوقعة للتحقق منها
     print("Predicted Labels:", predicted_labels)
+    # encoder = LabelEncoder()
     predicted_labels_names = encoder.inverse_transform(predicted_labels)
+
+
+
 
     # طباعة أسماء الفئات المتوقعة
     print("Predicted Labels Names:", predicted_labels_names)
@@ -33,4 +50,4 @@ def process_array():
     # Return the processed array as JSON
     return json.dumps(result)
 if __name__ == "__main__":
-    flask_app.run(host='192.168.8.98',port=5000)
+    flask_app.run()
