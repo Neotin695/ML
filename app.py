@@ -33,4 +33,4 @@ def process_array():
     # Return the processed array as JSON
     return json.dumps(result)
 if __name__ == "__main__":
-    flask_app.run(host='127.0.0.1',port=5000)
+    flask_app.run(host='192.168.8.98',port=5000)
