@@ -1,5 +1,5 @@
-gunicorn
-flask
+Gunicorn
+Flask
 pickle
 json
 numpy
