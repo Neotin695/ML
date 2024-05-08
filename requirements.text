@@ -1,0 +1,5 @@
+gunicorn
+flask
+pickle
+json
+numpy
