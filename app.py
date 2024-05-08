@@ -6,10 +6,10 @@ import pandas as pd
 
 from sklearn.preprocessing import LabelEncoder
 
-flask_app = Flask(__name__)
+app = Flask(__name__)
 model = pickle.load(open("model.pkl", "rb"))
 
-@flask_app.route('/', methods=['POST'])
+@app.route('/', methods=['POST'])
 def process_array():
 
 
@@ -50,4 +50,4 @@ def process_array():
     # Return the processed array as JSON
     return json.dumps(result)
 if __name__ == "__main__":
-    flask_app.run()
+    app.run()
